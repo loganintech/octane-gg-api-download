@@ -11,7 +11,7 @@ def get(req):
 
 
 def load_thing(thing):
-    with open(f'{thing}.json', 'r') as f:
+    with open(f"data/{thing}.json", 'r') as f:
         return json.loads(f.read())
 
 
@@ -35,7 +35,7 @@ def download_all_thing(thing):
             print(f"Processing {thing} page", page)
         page += 1
 
-    with open(f'{thing}.json', 'w') as f:
+    with open(f"data/{thing}.json", 'w') as f:
         f.write(json.dumps(total_things, indent=4))
 
 
@@ -48,7 +48,7 @@ def download_all_match_data():
     def download_all_event_matches():
         def downloading_event_matches(event_id):
             event_data = get(f'https://zsr.octane.gg/events/{event_id}/matches').json()
-            with open(f'events/{event_id}-matches.json', 'w') as f:
+            with open(f"data/events/{event_id}-matches.json", 'w') as f:
                 f.write(json.dumps(event_data, indent=4))
 
         for event in events:
@@ -57,7 +57,7 @@ def download_all_match_data():
     def download_all_event_participants():
         def downloading_event_participants(event_id):
             event_data = get(f'https://zsr.octane.gg/events/{event_id}/participants').json()
-            with open(f'events/{event_id}-participants.json', 'w') as f:
+            with open(f"data/events/{event_id}-participants.json", 'w') as f:
                 f.write(json.dumps(event_data, indent=4))
 
         for event in events:
@@ -75,7 +75,7 @@ def download_all_match_games():
 
     def download_match_games(match_id):
         game_data = get(f'https://zsr.octane.gg/matches/{match_id}/games').json()
-        with open(f'matches/{match_id}-games.json', 'w') as f:
+        with open(f"data/matches/{match_id}-games.json", 'w') as f:
             f.write(json.dumps(game_data, indent=4))
 
     matches_processed = 0
@@ -241,16 +241,16 @@ def download_app_player_aggregate_stats():
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
 
-        with open(f"{folder_path}/aggregate.json", 'w') as f:
+        with open(f"data/{folder_path}/aggregate.json", 'w') as f:
             f.write(json.dumps(aggregate, indent=4))
 
-        with open(f"{folder_path}/by_team.json", 'w') as f:
+        with open(f"data/{folder_path}/by_team.json", 'w') as f:
             f.write(json.dumps(by_team, indent=4))
 
-        with open(f"{folder_path}/by_opponent.json", 'w') as f:
+        with open(f"data/{folder_path}/by_opponent.json", 'w') as f:
             f.write(json.dumps(by_opponent, indent=4))
 
-        with open(f"{folder_path}/by_event.json", 'w') as f:
+        with open(f"data/{folder_path}/by_event.json", 'w') as f:
             f.write(json.dumps(by_event, indent=4))
 
         count += 1
@@ -274,13 +274,13 @@ def download_team_stats():
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
 
-        with open(f"{folder_path}/aggregate.json", 'w') as f:
+        with open(f"data/{folder_path}/aggregate.json", 'w') as f:
             f.write(json.dumps(aggregate, indent=4))
 
-        with open(f"{folder_path}/by_opponent.json", 'w') as f:
+        with open(f"data/{folder_path}/by_opponent.json", 'w') as f:
             f.write(json.dumps(by_opponent, indent=4))
 
-        with open(f"{folder_path}/by_event.json", 'w') as f:
+        with open(f"data/{folder_path}/by_event.json", 'w') as f:
             f.write(json.dumps(by_event, indent=4))
 
     def download_team_aggregate_stats(batch_size=10):

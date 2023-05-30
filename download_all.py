@@ -7,7 +7,7 @@ HEADERS = {"User-Agent": 'octane.gg Api Downloader'}
 
 
 def get(req):
-    return requests.get(req, headers=HEADERS, timeout=30).json()
+    return requests.get(req, headers=HEADERS, timeout=30)
 
 
 def load_thing(thing):

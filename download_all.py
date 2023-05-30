@@ -237,6 +237,7 @@ def download_app_player_aggregate_stats():
         by_team = do_player_stat_req(player['_id'], extra="/teams")
         by_opponent = do_player_stat_req(player['_id'], extra="/opponents")
         by_event = do_player_stat_req(player['_id'], extra="/events")
+
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
 
@@ -256,32 +257,29 @@ def download_app_player_aggregate_stats():
         if count % 10 == 0:
             print(f"Processed {count} players of {len(players)}")
 
+def do_team_stat_req(team_id, extra=''):
+    url = f'https://zsr.octane.gg/stats/teams{extra}?team={team_id}&stat={"&stat=".join(all_stats)}'
+    thing_req = get(url)
+    return thing_req
+
+def do_team_fetch(team_id):
+    folder_path = f"./team_stats/{team_id}"
+
+    aggregate = do_team_stat_req(team_id)
+    by_opponent = do_team_stat_req(team_id, extra="/opponents")
+    by_event = do_team_stat_req(team_id, extra="/events")
+
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    with open(f"{folder_path}/aggregate.json", 'w') as f:
+        f.write(json.dumps(aggregate, indent=4))
+    with open(f"{folder_path}/by_opponent.json", 'w') as f:
+        f.write(json.dumps(by_opponent, indent=4))
+    with open(f"{folder_path}/by_event.json", 'w') as f:
+        f.write(json.dumps(by_event, indent=4))
+
 
 def download_team_stats():
-    def do_team_stat_req(team_id, extra=''):
-        url = f'https://zsr.octane.gg/stats/teams{extra}?team={team_id}&stat={"&stat=".join(all_stats)}'
-        thing_req = get(url)
-        return thing_req
-
-    def do_team_fetch(team_id):
-        folder_path = f"./team_stats/{team_id}"
-
-        aggregate = do_team_stat_req(team_id)
-        by_opponent = do_team_stat_req(team_id, extra="/opponents")
-        by_event = do_team_stat_req(team_id, extra="/events")
-
-        if not os.path.exists(folder_path):
-            os.makedirs(folder_path)
-
-        with open(f"{folder_path}/aggregate.json", 'w') as f:
-            f.write(json.dumps(aggregate, indent=4))
-
-        with open(f"{folder_path}/by_opponent.json", 'w') as f:
-            f.write(json.dumps(by_opponent, indent=4))
-
-        with open(f"{folder_path}/by_event.json", 'w') as f:
-            f.write(json.dumps(by_event, indent=4))
-
     def download_team_aggregate_stats(batch_size=10):
         teams = load_thing("teams")
 
@@ -315,10 +313,10 @@ if __name__ == '__main__':
         os.makedirs("./data")
     os.chdir("./data")
 
-    download_all_thing('events')
-    download_all_thing('matches')
-    download_all_thing('games')
-    download_all_thing('players')
-    download_all_thing('teams')
-    download_app_player_aggregate_stats()
+    # download_all_thing('events')
+    # download_all_thing('matches')
+    # download_all_thing('games')
+    # download_all_thing('players')
+    # download_all_thing('teams')
+    # download_app_player_aggregate_stats()
     download_team_stats()

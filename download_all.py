@@ -280,26 +280,25 @@ def do_team_fetch(team_id):
 
 
 def download_team_stats():
-    def download_team_aggregate_stats(batch_size=10):
-        teams = load_thing("teams")
+    batch_size=10
+    teams = load_thing("teams")
 
-        offset = 0
-        while True:
-            batch = teams[offset:offset + batch_size]
-            if len(batch) == 0:
-                break
+    offset = 0
+    while True:
+        batch = teams[offset:offset + batch_size]
+        if len(batch) == 0:
+            break
 
-            procs = [multiprocessing.Process(target=do_team_fetch, args=(team['_id'],)) for team in batch]
-            for proc in procs:
-                proc.start()
+        procs = [multiprocessing.Process(target=do_team_fetch, args=(team['_id'],)) for team in batch]
+        for proc in procs:
+            proc.start()
 
-            for proc in procs:
-                proc.join()
+        for proc in procs:
+            proc.join()
 
-            offset += batch_size
-            print(f"Processed {offset} teams of {len(teams)}")
+        offset += batch_size
+        print(f"Processed {offset} teams of {len(teams)}")
 
-    download_team_aggregate_stats()
 
 
 if __name__ == '__main__':

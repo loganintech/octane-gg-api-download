@@ -7,7 +7,7 @@ HEADERS = {"User-Agent": 'octane.gg Api Downloader'}
 
 
 def get(req):
-    return requests.get(req, headers=HEADERS, timeout=30)
+    return requests.get(req, headers=HEADERS, timeout=30).json()
 
 
 def load_thing(thing):
@@ -17,8 +17,7 @@ def load_thing(thing):
 
 def download_all_thing(thing):
     def do_thing_req(page):
-        thing_req = get(f'https://zsr.octane.gg/{thing}?page={page}').json()
-        return thing_req
+        return get(f'https://zsr.octane.gg/{thing}?page={page}')
 
     total_things = []
 
@@ -47,7 +46,7 @@ def download_all_match_data():
 
     def download_all_event_matches():
         def downloading_event_matches(event_id):
-            event_data = get(f'https://zsr.octane.gg/events/{event_id}/matches').json()
+            event_data = get(f'https://zsr.octane.gg/events/{event_id}/matches')
             with open(f"events/{event_id}-matches.json", 'w') as f:
                 f.write(json.dumps(event_data, indent=4))
 
@@ -56,7 +55,7 @@ def download_all_match_data():
 
     def download_all_event_participants():
         def downloading_event_participants(event_id):
-            event_data = get(f'https://zsr.octane.gg/events/{event_id}/participants').json()
+            event_data = get(f'https://zsr.octane.gg/events/{event_id}/participants')
             with open(f"events/{event_id}-participants.json", 'w') as f:
                 f.write(json.dumps(event_data, indent=4))
 
@@ -74,7 +73,7 @@ def download_all_match_games():
         os.makedirs('matches')
 
     def download_match_games(match_id):
-        game_data = get(f'https://zsr.octane.gg/matches/{match_id}/games').json()
+        game_data = get(f'https://zsr.octane.gg/matches/{match_id}/games')
         with open(f"matches/{match_id}-games.json", 'w') as f:
             f.write(json.dumps(game_data, indent=4))
 
@@ -188,7 +187,7 @@ def determine_valid_record_stats():
     def do_player_stat_record_req(match_id, player_id, stat):
         url = f'https://zsr.octane.gg/records/players?type=game&player={player_id}&match={match_id}&stat={stat}'
         print(url)
-        thing_req = get(url).json()
+        thing_req = get(url)
         return thing_req
 
     found_valid_stats = []
@@ -226,7 +225,7 @@ def download_app_player_aggregate_stats():
 
     def do_player_stat_req(player_id, extra=''):
         url = f'https://zsr.octane.gg/stats/players{extra}?player={player_id}&stat={"&stat=".join(all_stats)}'
-        thing_req = get(url).json()
+        thing_req = get(url)
         return thing_req
 
     count = 0
@@ -261,7 +260,7 @@ def download_app_player_aggregate_stats():
 def download_team_stats():
     def do_team_stat_req(team_id, extra=''):
         url = f'https://zsr.octane.gg/stats/teams{extra}?team={team_id}&stat={"&stat=".join(all_stats)}'
-        thing_req = get(url).json()
+        thing_req = get(url)
         return thing_req
 
     def do_team_fetch(team_id):

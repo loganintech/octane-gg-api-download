@@ -257,10 +257,12 @@ def download_app_player_aggregate_stats():
         if count % 10 == 0:
             print(f"Processed {count} players of {len(players)}")
 
+
 def do_team_stat_req(team_id, extra=''):
     url = f'https://zsr.octane.gg/stats/teams{extra}?team={team_id}&stat={"&stat=".join(all_stats)}'
     thing_req = get(url)
     return thing_req
+
 
 def do_team_fetch(team_id):
     folder_path = f"./team_stats/{team_id}"
@@ -280,7 +282,7 @@ def do_team_fetch(team_id):
 
 
 def download_team_stats():
-    batch_size=10
+    batch_size = 10
     teams = load_thing("teams")
 
     offset = 0
@@ -298,7 +300,6 @@ def download_team_stats():
 
         offset += batch_size
         print(f"Processed {offset} teams of {len(teams)}")
-
 
 
 if __name__ == '__main__':
